@@ -23,7 +23,7 @@ func Install(installer *repo.Installer, stripVendor bool) {
 	// Lockfile exists
 	if !gpath.HasLock(base) {
 		msg.Info("Lock file (glide.lock) does not exist. Performing update.")
-		Update(installer, false, stripVendor)
+		Update(installer, false, stripVendor, false)
 		return
 	}
 	// Load lockfile

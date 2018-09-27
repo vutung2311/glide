@@ -12,13 +12,18 @@ import (
 )
 
 // Update updates repos and the lock file from the main glide yaml.
-func Update(installer *repo.Installer, skipRecursive, stripVendor bool) {
+func Update(installer *repo.Installer, skipRecursive, stripVendor, generateLockOnly bool) {
 	cache.SystemLock()
 
 	base := "."
 	EnsureGopath()
 	EnsureVendorDir()
 	conf := EnsureConfig()
+
+	if generateLockOnly {
+		generateLockFile(base, conf.Clone(), true)
+		return
+	}
 
 	// Try to check out the initial dependencies.
 	if err := installer.Checkout(conf); err != nil {
@@ -66,39 +71,7 @@ func Update(installer *repo.Installer, skipRecursive, stripVendor bool) {
 	// should be added to the glide.yaml file. See issue #193.
 
 	if !skipRecursive {
-		// Write lock
-		hash, err := conf.Hash()
-		if err != nil {
-			msg.Die("Failed to generate config hash. Unable to generate lock file.")
-		}
-		lock, err := cfg.NewLockfile(confcopy.Imports, confcopy.DevImports, hash)
-		if err != nil {
-			msg.Die("Failed to generate lock file: %s", err)
-		}
-		wl := true
-		if gpath.HasLock(base) {
-			yml, err := ioutil.ReadFile(filepath.Join(base, gpath.LockFile))
-			if err == nil {
-				l2, err := cfg.LockfileFromYaml(yml)
-				if err == nil {
-					f1, err := l2.Fingerprint()
-					f2, err2 := lock.Fingerprint()
-					if err == nil && err2 == nil && f1 == f2 {
-						wl = false
-					}
-				}
-			}
-		}
-		if wl {
-			if err := lock.WriteFile(filepath.Join(base, gpath.LockFile)); err != nil {
-				msg.Err("Could not write lock file to %s: %s", base, err)
-				return
-			}
-		} else {
-			msg.Info("Versions did not change. Skipping glide.lock update.")
-		}
-
-		msg.Info("Project relies on %d dependencies.", len(confcopy.Imports))
+		generateLockFile(base, confcopy, false)
 	} else {
 		msg.Warn("Skipping lockfile generation because full dependency tree is not being calculated")
 	}
@@ -110,4 +83,52 @@ func Update(installer *repo.Installer, skipRecursive, stripVendor bool) {
 			msg.Err("Unable to strip vendor directories: %s", err)
 		}
 	}
+}
+
+func generateLockFile(base string, conf *cfg.Config, updateHashOnly bool) *cfg.Config {
+	// Write lock
+	hash, err := conf.Hash()
+	if err != nil {
+		msg.Die("Failed to generate config hash. Unable to generate lock file.")
+	}
+	newLock, err := cfg.NewLockfile(conf.Imports, conf.DevImports, hash)
+	if err != nil {
+		msg.Die("Failed to generate lock file: %s", err)
+	}
+
+	if !gpath.HasLock(base) && updateHashOnly {
+		msg.Die("Failed to update lock file because there is no previous lock file.")
+	}
+	wl := true
+	if gpath.HasLock(base) {
+		yml, err := ioutil.ReadFile(filepath.Join(base, gpath.LockFile))
+		if err != nil {
+			msg.Die("Failed to read lock file: %v", err)
+		}
+		oldLock, err := cfg.LockfileFromYaml(yml)
+		if err != nil {
+			msg.Die("Failed to parse yaml from lock file: %v", err)
+		}
+		if updateHashOnly {
+			newLock = oldLock
+			newLock.Hash = hash
+		} else {
+			f1, err := oldLock.Fingerprint()
+			f2, err2 := newLock.Fingerprint()
+			if err == nil && err2 == nil && f1 == f2 {
+				wl = false
+			}
+		}
+	}
+	if wl {
+		if err := newLock.WriteFile(filepath.Join(base, gpath.LockFile)); err != nil {
+			msg.Err("Could not write lock file to %s: %s", base, err)
+			return nil
+		}
+	} else {
+		msg.Info("Versions did not change. Skipping glide.lock update.")
+	}
+
+	msg.Info("Project relies on %d dependencies.", len(conf.Imports))
+	return conf
 }

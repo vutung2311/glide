@@ -968,13 +968,13 @@ var PackagesAddedToStdlib = map[string]struct{}{
 	// context and net/http/httptrace are packages being added to
 	// the Go 1.7 standard library. Some packages, such as golang.org/x/net
 	// are importing it with build flags in files for go1.7.
-	"context":            struct{}{},
-	"net/http/httptrace": struct{}{},
+	"context":            {},
+	"net/http/httptrace": {},
 
 	// math.bits are packages being added to the Go 1.9 standard library.
 	// Some packages, such as github.com/RoaringBitmap/roaring are importing
 	// it with build flags in files for go1.9.
-	"math/bits": struct{}{},
+	"math/bits": {},
 }
 
 // FindPkg takes a package name and attempts to find it on the filesystem

@@ -596,6 +596,10 @@ Example:
 					Name:  "skip-test",
 					Usage: "Resolve dependencies in test files.",
 				},
+				cli.BoolFlag{
+					Name:  "lock",
+					Usage: "Regenerate lock file only.",
+				},
 			},
 			Action: func(c *cli.Context) error {
 				if c.Bool("delete") {
@@ -631,7 +635,7 @@ Example:
 				installer.Home = c.GlobalString("home")
 				installer.ResolveTest = !c.Bool("skip-test")
 
-				action.Update(installer, c.Bool("no-recursive"), c.Bool("strip-vendor"))
+				action.Update(installer, c.Bool("no-recursive"), c.Bool("strip-vendor"), c.Bool("lock"))
 
 				return nil
 			},

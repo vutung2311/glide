@@ -11,16 +11,16 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Masterminds/glide/cache"
-	"github.com/Masterminds/glide/cfg"
-	"github.com/Masterminds/glide/dependency"
-	"github.com/Masterminds/glide/importer"
-	"github.com/Masterminds/glide/msg"
-	gpath "github.com/Masterminds/glide/path"
-	"github.com/Masterminds/glide/util"
 	"github.com/Masterminds/semver"
 	"github.com/Masterminds/vcs"
 	"github.com/codegangsta/cli"
+	"github.com/vutung2311/glide/cache"
+	"github.com/vutung2311/glide/cfg"
+	"github.com/vutung2311/glide/dependency"
+	"github.com/vutung2311/glide/importer"
+	"github.com/vutung2311/glide/msg"
+	gpath "github.com/vutung2311/glide/path"
+	"github.com/vutung2311/glide/util"
 )
 
 // Installer provides facilities for installing the repos in a config file.

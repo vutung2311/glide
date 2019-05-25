@@ -1,7 +1,7 @@
 package action
 
 import (
-	"github.com/Masterminds/glide/msg"
+	"github.com/vutung2311/glide/msg"
 )
 
 // Debug sets the debugging flags across components.

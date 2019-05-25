@@ -4,8 +4,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Masterminds/glide/godep/strip"
-	"github.com/Masterminds/glide/msg"
+	"github.com/vutung2311/glide/godep/strip"
+	"github.com/vutung2311/glide/msg"
 )
 
 func getWalkFunction(searchPath string, removeAll func(p string) error) func(path string,

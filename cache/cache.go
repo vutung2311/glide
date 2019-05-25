@@ -39,8 +39,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Masterminds/glide/msg"
-	gpath "github.com/Masterminds/glide/path"
+	"github.com/vutung2311/glide/msg"
+	gpath "github.com/vutung2311/glide/path"
 )
 
 // Enabled sets if the cache is globally enabled. Defaults to true.

@@ -8,9 +8,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Masterminds/glide/mirrors"
-	"github.com/Masterminds/glide/util"
 	"github.com/Masterminds/vcs"
+	"github.com/vutung2311/glide/mirrors"
+	"github.com/vutung2311/glide/util"
 	"gopkg.in/yaml.v2"
 )
 

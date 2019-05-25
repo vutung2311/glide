@@ -4,7 +4,7 @@ import "testing"
 
 func TestRewriteGodepImport(t *testing.T) {
 	tests := map[string]string{
-		"github.com/Masterminds/glide/action":                           "github.com/Masterminds/glide/action",
+		"github.com/vutung2311/glide/action":                            "github.com/vutung2311/glide/action",
 		"github.com/tools/godep/Godeps/_workspace/src/github.com/kr/fs": "github.com/kr/fs",
 	}
 

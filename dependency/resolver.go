@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Masterminds/glide/cfg"
-	"github.com/Masterminds/glide/msg"
-	gpath "github.com/Masterminds/glide/path"
-	"github.com/Masterminds/glide/util"
+	"github.com/vutung2311/glide/cfg"
+	"github.com/vutung2311/glide/msg"
+	gpath "github.com/vutung2311/glide/path"
+	"github.com/vutung2311/glide/util"
 )
 
 // MissingPackageHandler handles the case where a package is missing during scanning.
